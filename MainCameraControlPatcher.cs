@@ -15,9 +15,11 @@ namespace SubnauticaSnapTurningMod
         {
             var didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight);
             var didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft);
-            var didLook = didLookLeft || didLookRight;
+            var isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
+            var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
+            var isLooking = didLookLeft || didLookRight || isLookingLeft || isLookingRight;
 
-            var shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && VRSettings.enabled && didLook;
+            var shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && VRSettings.enabled && isLooking;
             if (!shouldSnapTurn)
             {
                 return true; //Enter vanilla method as usual
