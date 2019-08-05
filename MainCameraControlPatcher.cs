@@ -13,7 +13,11 @@ namespace SubnauticaSnapTurningMod
         [HarmonyPrefix]
         public static bool Prefix()
         {
-            bool shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && VRSettings.enabled;
+            var didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight);
+            var didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft);
+            var didLook = didLookLeft || didLookRight;
+
+            var shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && VRSettings.enabled && didLook;
             if (!shouldSnapTurn)
             {
                 return true; //Enter vanilla method as usual
@@ -21,11 +25,11 @@ namespace SubnauticaSnapTurningMod
 
             var newEulerAngles = Player.main.transform.localRotation.eulerAngles;
 
-            if (GameInput.GetButtonDown(GameInput.Button.LookRight))
+            if (didLookRight)
             {
                 newEulerAngles.y += SNAP_AMOUNT;
             }
-            else if (GameInput.GetButtonDown(GameInput.Button.LookLeft))
+            else if (didLookLeft)
             {
                 newEulerAngles.y -= SNAP_AMOUNT;
             }
