@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Harmony;
+using SMLHelper.V2.Handlers;
 
 namespace SubnauticaSnapTurningMod
 {
@@ -7,7 +8,10 @@ namespace SubnauticaSnapTurningMod
     {
         public static void Patch()
         {
-            var harmony = HarmonyInstance.Create("com.oldark.subnautica.acceleratedstart.mod");
+            Config.Load();
+            OptionsPanelHandler.RegisterModOptions(new Options());
+
+            var harmony = HarmonyInstance.Create("com.ethanfischer.subnautica.snapturning.mod");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
