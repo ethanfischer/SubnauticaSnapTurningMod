@@ -3,12 +3,13 @@ using UnityEngine;
 
 public static class Config
 {
-    public static bool ToggleValue;
-    public static int ChoiceIndex;
+    public static bool EnableSnapTurning = true;
+    public static int SnapAngleChoiceIndex = 0;
+    public static float[] SnapAngles = { 45, 90, 22.5f };
 
     public static void Load()
     {
-        ToggleValue = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
-        ChoiceIndex = PlayerPrefs.GetInt(Options.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
+        EnableSnapTurning = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
+        SnapAngleChoiceIndex = PlayerPrefs.GetInt(Options.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
     }
 }

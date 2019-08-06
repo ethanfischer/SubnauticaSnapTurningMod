@@ -8,11 +8,16 @@ namespace SubnauticaSnapTurningMod
     [HarmonyPatch("Update")]
     internal class MainCameraControlPatcher
     {
-        const float SNAP_AMOUNT = 45f;
+        private static float SnapAngle => Config.SnapAngles[Config.SnapAngleChoiceIndex];
 
         [HarmonyPrefix]
         public static bool Prefix()
         {
+            if(!Config.EnableSnapTurning)
+            {
+                return true; //Enter vanilla method
+            }
+
             var didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight);
             var didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft);
             var isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
@@ -29,11 +34,11 @@ namespace SubnauticaSnapTurningMod
 
             if (didLookRight)
             {
-                newEulerAngles.y += SNAP_AMOUNT;
+                newEulerAngles.y += SnapAngle;
             }
             else if (didLookLeft)
             {
-                newEulerAngles.y -= SNAP_AMOUNT;
+                newEulerAngles.y -= SnapAngle;
             }
 
             Player.main.transform.localRotation = Quaternion.Euler(newEulerAngles);
