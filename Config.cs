@@ -8,7 +8,7 @@ public static class Config
 
     public static void Load()
     {
-        ToggleValue = PlayerPrefsExtra.GetBool(Options.PLAYERPREFKEY_TOGGLE_SNAP_TURNING, true);
-        ChoiceIndex = PlayerPrefs.GetInt(Options.PLAYERPREFKEY_SNAP_ANGLE, 0);
+        ToggleValue = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
+        ChoiceIndex = PlayerPrefs.GetInt(Options.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
     }
 }
