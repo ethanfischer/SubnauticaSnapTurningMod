@@ -8,7 +8,7 @@ public static class Config
 
     public static void Load()
     {
-        ToggleValue = PlayerPrefsExtra.GetBool("SMLHelperExampleModToggle", true);
-        ChoiceIndex = PlayerPrefs.GetInt("SMLHelperExampleModChoice", 0);
+        ToggleValue = PlayerPrefsExtra.GetBool(Options.PLAYERPREFKEY_TOGGLE_SNAP_TURNING, true);
+        ChoiceIndex = PlayerPrefs.GetInt(Options.PLAYERPREFKEY_SNAP_ANGLE, 0);
     }
 }
