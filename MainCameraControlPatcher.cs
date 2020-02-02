@@ -1,6 +1,6 @@
 ﻿using Harmony;
 using UnityEngine;
-using UnityEngine.VR;
+using UnityEngine.XR;
 
 namespace SubnauticaSnapTurningMod
 {
@@ -24,7 +24,7 @@ namespace SubnauticaSnapTurningMod
             var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
             var isLooking = didLookLeft || didLookRight || isLookingLeft || isLookingRight;
 
-            var shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && VRSettings.enabled && isLooking;
+            var shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && XRSettings.enabled && isLooking;
             if (!shouldSnapTurn)
             {
                 return true; //Enter vanilla method as usual
