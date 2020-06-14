@@ -2,10 +2,8 @@
   "Id": "SnapTurning",
   "DisplayName": "Snap Turning",
   "Author": "Ethan Fischer",
-  "Version": "1.0",
-  "Requires": [],
+  "Version": "1.1",
   "Enable": true,
-  "AssemblyName": "SubnauticaSnapTurningMod.dll",
-  "EntryMethod": "SubnauticaSnapTurningMod.MainPatcher.Patch",
-  "Config": {}
+  "Game": "Subnautica",
+  "AssemblyName": "SubnauticaSnapTurningMod.dll"
 }
