@@ -10,6 +10,17 @@ public static class Config
     public static void Load()
     {
         EnableSnapTurning = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
-        SnapAngleChoiceIndex = PlayerPrefs.GetInt(Options.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
+        SnapAngleChoiceIndex = GetSnapAngleChoiceIndex();
+    }
+
+    private static int GetSnapAngleChoiceIndex()
+    {
+        var result = PlayerPrefs.GetInt(Options.PLAYER_PREF_KEY_SNAP_ANGLE, 0);
+        if (result > SnapAngles.Length)
+        {
+            result = 0;
+        }
+
+        return result;
     }
 }
