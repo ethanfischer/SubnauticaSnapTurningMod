@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using SMLHelper.V2.Utility;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -13,13 +14,13 @@ namespace SubnauticaSnapTurningMod
         [HarmonyPrefix]
         public static bool Prefix()
         {
-            if(!Config.EnableSnapTurning)
+            if (!Config.EnableSnapTurning)
             {
                 return true; //Enter vanilla method
             }
 
-            var didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight);
-            var didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft);
+            var didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight) || KeyCodeUtils.GetKeyDown(Config.KeybindKeyRight);
+            var didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft) || KeyCodeUtils.GetKeyDown(Config.KeybindKeyLeft);
             var isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
             var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
             var isLooking = didLookLeft || didLookRight || isLookingLeft || isLookingRight;

@@ -13,6 +13,7 @@ public class Options : ModOptions
     {
         ToggleChanged += Options_ToggleChanged;
         ChoiceChanged += Options_ChoiceChanged;
+        KeybindChanged += Options_KeybindChanged;
     }
 
     public void Options_ToggleChanged(object sender, ToggleChangedEventArgs e)
@@ -29,9 +30,25 @@ public class Options : ModOptions
         PlayerPrefs.SetInt(PLAYER_PREF_KEY_SNAP_ANGLE, e.Index);
     }
 
+    public void Options_KeybindChanged(object sender, KeybindChangedEventArgs e)
+    {
+        if (e.Id == "exampleKeybindLeft")
+        {
+            Config.KeybindKeyLeft = e.Key;
+            PlayerPrefsExtra.SetKeyCode("SMLHelperExampleModKeybindLeft", e.Key);
+        }
+        if (e.Id == "exampleKeybindRight")
+        {
+            Config.KeybindKeyRight = e.Key;
+            PlayerPrefsExtra.SetKeyCode("SMLHelperExampleModKeybindRight", e.Key);
+        }
+    }
+
     public override void BuildModOptions()
     {
         AddToggleOption(TOGGLE_CHANGED_ID_SNAP_TURNING, "Enabled", Config.EnableSnapTurning);
         AddChoiceOption(CHOICE_CHANGED_ID_SNAP_ANGLE, "Angle", new string[] { "45", "90", "22.5" }, Config.SnapAngleChoiceIndex);
+        AddKeybindOption("exampleKeybindLeft", "Look Left", GameInput.Device.Keyboard, Config.KeybindKeyLeft);
+        AddKeybindOption("exampleKeybindRight", "Look Right", GameInput.Device.Keyboard, Config.KeybindKeyRight);
     }
 }
