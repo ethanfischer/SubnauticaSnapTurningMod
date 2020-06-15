@@ -28,7 +28,7 @@ namespace SubnauticaSnapTurningMod
             var shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && XRSettings.enabled && isLooking;
             if (!shouldSnapTurn)
             {
-                return true; //Enter vanilla method as usual
+                return Config.EnableMouseLook; //Enter vanilla if mouse look enabled
             }
 
             var newEulerAngles = Player.main.transform.localRotation.eulerAngles;
