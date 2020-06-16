@@ -85,10 +85,12 @@ public class Options : ModOptions
         AddToggleOption(TOGGLE_CHANGED_ID_SNAP_TURNING, "Enabled", Config.EnableSnapTurning);
         AddChoiceOption(CHOICE_CHANGED_ID_SNAP_ANGLE, "Angle", new string[] { "45", "90", "22.5" }, Config.SnapAngleChoiceIndex);
 
-        AddKeybindOption("exampleKeybindLeft", "Keyboard Left", GameInput.Device.Keyboard, Config.KeybindKeyLeft);
-        AddKeybindOption("exampleKeybindRight", "Keyboard Right", GameInput.Device.Keyboard, Config.KeybindKeyRight);
-
-        AddToggleOption(TOGGLE_CHANGED_ID_ENABLE_MOUSE, "Mouse Look", Config.EnableMouseLook);
+        if (!GameInput.IsPrimaryDeviceGamepad())
+        {
+            AddKeybindOption("exampleKeybindLeft", "Keyboard Left", GameInput.Device.Keyboard, Config.KeybindKeyLeft);
+            AddKeybindOption("exampleKeybindRight", "Keyboard Right", GameInput.Device.Keyboard, Config.KeybindKeyRight);
+            AddToggleOption(TOGGLE_CHANGED_ID_ENABLE_MOUSE, "Mouse Look", Config.EnableMouseLook);
+        }
 
         AddToggleOption(TOGGLE_CHANGED_ID_SEAMOTH, "Seamoth", Config.EnableSeamoth);
         AddChoiceOption(CHOICE_CHANGED_ID_SEAMOTH_ANGLE, "Seamoth Angle", new string[] { "45", "90", "22.5" }, Config.SeamothAngleChoiceIndex);
