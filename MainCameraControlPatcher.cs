@@ -10,6 +10,7 @@ namespace SubnauticaSnapTurningMod
     internal class MainCameraControlPatcher
     {
         private static float SnapAngle => Config.SnapAngles[Config.SnapAngleChoiceIndex];
+        private static bool IsInSeamothOrPrawnSuit => Player.main.motorMode != Player.MotorMode.Vehicle;
 
         [HarmonyPrefix]
         public static bool Prefix()
@@ -25,13 +26,22 @@ namespace SubnauticaSnapTurningMod
             var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
             var isLooking = didLookLeft || didLookRight || isLookingLeft || isLookingRight;
 
-            var shouldSnapTurn = Player.main.motorMode != Player.MotorMode.Vehicle && XRSettings.enabled && isLooking;
+            var shouldSnapTurn = /*Player.main.motorMode != Player.MotorMode.Vehicle &&*/ XRSettings.enabled && isLooking;
             if (!shouldSnapTurn)
             {
                 return Config.EnableMouseLook; //Enter vanilla if mouse look enabled
             }
 
-            var newEulerAngles = Player.main.transform.localRotation.eulerAngles;
+            UpdatePlayerOrVehicleRotation(didLookRight, didLookLeft);
+
+            return false; //Don't enter vanilla method
+        }
+
+        private static Vector3 GetNewEulerAngles(bool didLookRight, bool didLookLeft)
+        {
+            var newEulerAngles = IsInSeamothOrPrawnSuit
+                ? Player.main.currentMountedVehicle.transform.localRotation.eulerAngles
+                : Player.main.transform.localRotation.eulerAngles;
 
             if (didLookRight)
             {
@@ -42,9 +52,21 @@ namespace SubnauticaSnapTurningMod
                 newEulerAngles.y -= SnapAngle;
             }
 
-            Player.main.transform.localRotation = Quaternion.Euler(newEulerAngles);
+            return newEulerAngles;
+        }
 
-            return false; //Don't enter vanilla method
+        private static void UpdatePlayerOrVehicleRotation(bool didLookRight, bool didLookLeft)
+        {
+            var newEulerAngles = GetNewEulerAngles(didLookRight, didLookLeft);
+
+            if (IsInSeamothOrPrawnSuit)
+            {
+                Player.main.currentMountedVehicle.transform.localRotation = Quaternion.Euler(newEulerAngles);
+            }
+            else
+            {
+                Player.main.transform.localRotation = Quaternion.Euler(newEulerAngles);
+            }
         }
     }
 }
