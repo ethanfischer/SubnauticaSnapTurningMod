@@ -18,7 +18,9 @@ namespace SubnauticaSnapTurningMod
         [HarmonyPrefix]
         public static bool Prefix()
         {
-            if (!Config.EnableSnapTurning)
+            var isIgnoringSeamoth = IsInSeamoth && !Config.EnableSeamoth;
+            var isIgnoringPrawn = IsInPrawnSuit && !Config.EnablePrawn;
+            if (!Config.EnableSnapTurning || isIgnoringSeamoth || isIgnoringPrawn)
             {
                 return true; //Enter vanilla method
             }
@@ -43,11 +45,11 @@ namespace SubnauticaSnapTurningMod
         {
             var newEulerAngles = GetNewEulerAngles(didLookRight, didLookLeft);
 
-            if (IsInSeamoth && Config.EnableSeamoth)
+            if (IsInSeamoth)
             {
                 Player.main.currentMountedVehicle.transform.localRotation = Quaternion.Euler(newEulerAngles);
             }
-            else if (IsInPrawnSuit && Config.EnablePrawn)
+            else if (IsInPrawnSuit)
             {
                 Player.main.currentMountedVehicle.transform.localRotation = Quaternion.Euler(newEulerAngles);
             }
