@@ -10,7 +10,10 @@ namespace SubnauticaSnapTurningMod
     internal class MainCameraControlPatcher
     {
         private static float SnapAngle => Config.SnapAngles[Config.SnapAngleChoiceIndex];
-        private static bool IsInSeamothOrPrawnSuit => Player.main.motorMode != Player.MotorMode.Vehicle;
+        private static float SeamothSnapAngle => Config.SnapAngles[Config.SeamothAngleChoiceIndex];
+        private static float PrawnSnapAngle => Config.SnapAngles[Config.PrawnAngleChoiceIndex];
+        private static bool IsInPrawnSuit => Player.main.inExosuit;
+        private static bool IsInSeamoth => Player.main.inSeamoth; 
 
         [HarmonyPrefix]
         public static bool Prefix()
@@ -26,40 +29,25 @@ namespace SubnauticaSnapTurningMod
             var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
             var isLooking = didLookLeft || didLookRight || isLookingLeft || isLookingRight;
 
-            var shouldSnapTurn = /*Player.main.motorMode != Player.MotorMode.Vehicle &&*/ XRSettings.enabled && isLooking;
-            if (!shouldSnapTurn)
+            var shouldSnapTurn = XRSettings.enabled && isLooking;
+            if (shouldSnapTurn)
             {
-                return Config.EnableMouseLook; //Enter vanilla if mouse look enabled
+                UpdatePlayerOrVehicleRotation(didLookRight, didLookLeft);
+                return false; //Don't enter vanilla method if we snap turn
             }
 
-            UpdatePlayerOrVehicleRotation(didLookRight, didLookLeft);
-
-            return false; //Don't enter vanilla method
-        }
-
-        private static Vector3 GetNewEulerAngles(bool didLookRight, bool didLookLeft)
-        {
-            var newEulerAngles = IsInSeamothOrPrawnSuit
-                ? Player.main.currentMountedVehicle.transform.localRotation.eulerAngles
-                : Player.main.transform.localRotation.eulerAngles;
-
-            if (didLookRight)
-            {
-                newEulerAngles.y += SnapAngle;
-            }
-            else if (didLookLeft)
-            {
-                newEulerAngles.y -= SnapAngle;
-            }
-
-            return newEulerAngles;
+            return Config.EnableMouseLook; //Enter vanilla method if mouse look is enabled
         }
 
         private static void UpdatePlayerOrVehicleRotation(bool didLookRight, bool didLookLeft)
         {
             var newEulerAngles = GetNewEulerAngles(didLookRight, didLookLeft);
 
-            if (IsInSeamothOrPrawnSuit)
+            if (IsInSeamoth && Config.EnableSeamoth)
+            {
+                Player.main.currentMountedVehicle.transform.localRotation = Quaternion.Euler(newEulerAngles);
+            }
+            else if (IsInPrawnSuit && Config.EnablePrawn)
             {
                 Player.main.currentMountedVehicle.transform.localRotation = Quaternion.Euler(newEulerAngles);
             }
@@ -67,6 +55,42 @@ namespace SubnauticaSnapTurningMod
             {
                 Player.main.transform.localRotation = Quaternion.Euler(newEulerAngles);
             }
+        }
+
+        private static Vector3 GetNewEulerAngles(bool didLookRight, bool didLookLeft)
+        {
+            var isInVehicle = IsInSeamoth || IsInPrawnSuit;
+            var newEulerAngles = isInVehicle
+                ? Player.main.currentMountedVehicle.transform.localRotation.eulerAngles
+                : Player.main.transform.localRotation.eulerAngles;
+
+            var angle = GetSnapAngle();
+
+            if (didLookRight)
+            {
+                newEulerAngles.y += angle;
+            }
+            else if (didLookLeft)
+            {
+                newEulerAngles.y -= angle;
+            }
+
+            return newEulerAngles;
+        }
+
+        private static float GetSnapAngle()
+        {
+            var snapAngle = SnapAngle;
+            if (IsInSeamoth)
+            {
+                snapAngle = SeamothSnapAngle;
+            }
+            else if (IsInPrawnSuit)
+            {
+                snapAngle = PrawnSnapAngle;
+            }
+
+            return snapAngle;
         }
     }
 }
