@@ -38,7 +38,7 @@ namespace SubnauticaSnapTurningMod
                 return false; //Don't enter vanilla method if we snap turn
             }
 
-            return Config.EnableMouseLook; //Enter vanilla method if mouse look is enabled
+            return true;
         }
 
         private static void UpdatePlayerOrVehicleRotation(bool didLookRight, bool didLookLeft)

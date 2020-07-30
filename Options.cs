@@ -5,12 +5,10 @@ using UnityEngine;
 public class Options : ModOptions
 {
     public const string PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING = "SnapTurningTogglePlayerPrefKey";
-    public const string PLAYER_PREF_KEY_TOGGLE_MOUSE = "SnapTurningToggleDisableMouseKey";
     public const string PLAYER_PREF_KEY_TOGGLE_SEAMOTH = "SnapTurningToggleSeamoth";
     public const string PLAYER_PREF_KEY_TOGGLE_PRAWN = "SnapTurningTogglePrawn";
     public const string PLAYER_PREF_KEY_SNAP_ANGLE = "SnapAnglePlayerPrefKey";
     private const string TOGGLE_CHANGED_ID_SNAP_TURNING = "SnapTurningId";
-    private const string TOGGLE_CHANGED_ID_ENABLE_MOUSE = "DisableMouseId";
     private const string TOGGLE_CHANGED_ID_SEAMOTH = "SeamothId";
     private const string TOGGLE_CHANGED_ID_PRAWN = "PrawnId";
     private const string CHOICE_CHANGED_ID_SNAP_ANGLE = "SnapAngleId";
@@ -31,10 +29,6 @@ public class Options : ModOptions
             case TOGGLE_CHANGED_ID_SNAP_TURNING:
                 Config.EnableSnapTurning = e.Value;
                 PlayerPrefsExtra.SetBool(PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, e.Value);
-                break;
-            case TOGGLE_CHANGED_ID_ENABLE_MOUSE:
-                Config.EnableMouseLook = e.Value;
-                PlayerPrefsExtra.SetBool(PLAYER_PREF_KEY_TOGGLE_MOUSE, e.Value);
                 break;
             case TOGGLE_CHANGED_ID_SEAMOTH:
                 Config.EnableSeamoth = e.Value;
@@ -89,7 +83,6 @@ public class Options : ModOptions
         {
             AddKeybindOption("exampleKeybindLeft", "Keyboard Left", GameInput.Device.Keyboard, Config.KeybindKeyLeft);
             AddKeybindOption("exampleKeybindRight", "Keyboard Right", GameInput.Device.Keyboard, Config.KeybindKeyRight);
-            AddToggleOption(TOGGLE_CHANGED_ID_ENABLE_MOUSE, "Mouse Look", Config.EnableMouseLook);
         }
 
         AddToggleOption(TOGGLE_CHANGED_ID_SEAMOTH, "Seamoth", Config.EnableSeamoth);

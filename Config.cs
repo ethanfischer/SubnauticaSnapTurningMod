@@ -4,7 +4,6 @@ using UnityEngine;
 public static class Config
 {
     public static bool EnableSnapTurning = true;
-    public static bool EnableMouseLook = false;
     public static bool EnableSeamoth = false;
     public static bool EnablePrawn = false;
     public static int SnapAngleChoiceIndex = 0;
@@ -17,7 +16,6 @@ public static class Config
     public static void Load()
     {
         EnableSnapTurning = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_SNAP_TURNING, true);
-        EnableMouseLook = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_MOUSE, false);
         EnableSeamoth = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_SEAMOTH, false);
         EnablePrawn = PlayerPrefsExtra.GetBool(Options.PLAYER_PREF_KEY_TOGGLE_PRAWN, false);
         SnapAngleChoiceIndex = GetSnapAngleChoiceIndex(SnapType.Default);
