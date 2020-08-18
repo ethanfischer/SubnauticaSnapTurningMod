@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using SMLHelper.V2.Handlers;
 using QModManager.API.ModLoading;
-using Harmony;
+using HarmonyLib;
 
 namespace SubnauticaSnapTurningMod
 {
@@ -14,7 +14,7 @@ namespace SubnauticaSnapTurningMod
             Config.Load();
             OptionsPanelHandler.RegisterModOptions(new Options());
 
-            var harmony = HarmonyInstance.Create("com.ethanfischer.subnautica.snapturning.mod");
+            var harmony = new Harmony("com.ethanfischer.subnautica.snapturning.mod");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
 
