@@ -14,3 +14,6 @@ www.nexusmods.com/subnautica/mods/113
 
 Options menu example was followed from here:
 https://github.com/QModManager/SMLHelper/blob/2.2.1/Example%20mod/Mod.cs
+
+
+BepInEx version can be used with MrPurple's famous Vortex multiplayer mod. Just build the snap turning .dll using the BepInEx branch or download from releases page
