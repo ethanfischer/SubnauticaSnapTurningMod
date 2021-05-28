@@ -1,22 +1,29 @@
-﻿using System.Reflection;
-using SMLHelper.V2.Handlers;
-using QModManager.API.ModLoading;
+﻿using BepInEx;
 using HarmonyLib;
+using UnityEngine;
+using UnityEngine.XR;
+using VRTweaks.SnapTurn;
 
 namespace SubnauticaSnapTurningMod
 {
-    [QModCore]
-    public static class MainPatcher
-    {
-        [QModPatch]
-        public static void Patch()
+	[BepInPlugin(GUID, MODNAME, VERSION)]
+	public class MainPatcher : BaseUnityPlugin
+	{
+		public const string
+			MODNAME = "SnapTurning",
+			AUTHOR = "ethanfischer",
+			GUID = "com.ethanfischer.subnautica.snapturning.mod",
+			VERSION = "1.0.0.0";
+
+		private static Harmony harmony = new Harmony(GUID);
+
+		public void Start()
         {
-            Config.Load();
-            OptionsPanelHandler.RegisterModOptions(new Options());
-
-            var harmony = new Harmony("com.ethanfischer.subnautica.snapturning.mod");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+			if(XRSettings.enabled)
+            {
+				MainPatcher.harmony.Patch(AccessTools.Method(typeof(MainCameraControl), "Update"), prefix: new HarmonyMethod(typeof(SnapTurning).GetMethod(nameof(SnapTurning.Prefix))));
+				SnapTurningMenu.Patch();
+            }
         }
-
     }
 }
