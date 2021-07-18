@@ -13,7 +13,7 @@ namespace SubnauticaSnapTurningMod
         private static float SeamothSnapAngle => Config.SnapAngles[Config.SeamothAngleChoiceIndex];
         private static float PrawnSnapAngle => Config.SnapAngles[Config.PrawnAngleChoiceIndex];
         private static bool IsInPrawnSuit => Player.main.inExosuit;
-        private static bool IsInSeamoth => Player.main.inSeamoth; 
+        private static bool IsInSeamoth => Player.main.inSeamoth;
 
         [HarmonyPrefix]
         public static bool Prefix()
@@ -31,7 +31,7 @@ namespace SubnauticaSnapTurningMod
             var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
             var isLooking = didLookLeft || didLookRight || isLookingLeft || isLookingRight;
 
-            var shouldSnapTurn = XRSettings.enabled && isLooking;
+            var shouldSnapTurn = XRSettings.enabled && isLooking; 
             if (shouldSnapTurn)
             {
                 UpdatePlayerOrVehicleRotation(didLookRight, didLookLeft);
@@ -93,6 +93,36 @@ namespace SubnauticaSnapTurningMod
             }
 
             return snapAngle;
+        }
+
+        [HarmonyPrefix]
+        public static bool VehicleRotationFix()
+        {
+            bool SnapTurnInSeamothAndPrawn = Config.EnableSeamoth && Config.EnablePrawn;
+            bool SnapTurnInSeamothOnly = Config.EnableSeamoth && !Config.EnablePrawn;
+            bool SnapTurnInPrawnOnly = !Config.EnableSeamoth && Config.EnablePrawn;
+
+            if (GameInput.GetControllerHorizontalSensitivity() != 0f &&
+                (
+                (SnapTurnInSeamothAndPrawn && Player.main.IsPiloting()) ||
+                (SnapTurnInSeamothOnly && Player.main.inSeamoth) ||
+                (SnapTurnInPrawnOnly && Player.main.inExosuit)
+                ))
+            {   // set sensitivity to 0 to prevent unwanted prawn rotation
+                GameInput.SetControllerHorizontalSensitivity(0f);
+                return true;
+            }
+            else if (GameInput.GetControllerHorizontalSensitivity() == 0f &&
+                (
+                (SnapTurnInSeamothAndPrawn && !Player.main.IsPiloting()) ||
+                (SnapTurnInPrawnOnly && (!Player.main.inExosuit)) ||
+                (SnapTurnInSeamothOnly && (!Player.main.inSeamoth))) ||
+                (!Config.EnableSeamoth && !Config.EnablePrawn) || !Config.EnableSnapTurning)
+            {   // set sensitivity back to default value
+                GameInput.SetControllerHorizontalSensitivity(GameInput.defaultControllerSensitivity);
+                return true;
+            }
+            return true;
         }
     }
 }
