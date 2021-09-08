@@ -108,10 +108,11 @@ namespace SubnauticaSnapTurningMod
                 (SnapTurnInSeamothOnly && Player.main.inSeamoth) ||
                 (SnapTurnInPrawnOnly && Player.main.inExosuit)
                 ))
-            {   // set sensitivity to 0 to prevent unwanted prawn rotation
+            {   // set sensitivity to 0 to prevent unwanted vehicle rotation
                 GameInput.SetControllerHorizontalSensitivity(0f);
                 return true;
             }
+            
             else if (GameInput.GetControllerHorizontalSensitivity() == 0f &&
                 (
                 (SnapTurnInSeamothAndPrawn && !Player.main.IsPiloting()) ||
@@ -122,6 +123,7 @@ namespace SubnauticaSnapTurningMod
                 GameInput.SetControllerHorizontalSensitivity(GameInput.defaultControllerSensitivity);
                 return true;
             }
+            
             return true;
         }
     }
