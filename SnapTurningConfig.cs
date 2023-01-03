@@ -1,7 +1,7 @@
 ﻿using SMLHelper.V2.Utility;
 using UnityEngine;
 
-public static class Config
+public static class SnapTurningConfig
 {
     public static bool EnableSnapTurning = true;
     public static bool EnableSeamoth = false;

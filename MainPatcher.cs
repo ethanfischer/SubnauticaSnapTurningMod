@@ -1,22 +1,27 @@
 ﻿using System.Reflection;
 using SMLHelper.V2.Handlers;
-using QModManager.API.ModLoading;
+using BepInEx;
 using HarmonyLib;
 
 namespace SubnauticaSnapTurningMod
 {
-    [QModCore]
-    public static class MainPatcher
+    [BepInPlugin(GUID, MODNAME, VERSION)]
+    public class MainPatcher : BaseUnityPlugin
     {
-        [QModPatch]
-        public static void Patch()
+        public const string
+            MODNAME = "SnapTurning",
+            AUTHOR = "ethanfischer",
+            GUID = "com.ethanfischer.subnautica.snapturning.mod",
+            VERSION = "1.1.1";
+
+        private static Harmony harmony = new Harmony(GUID);
+
+        public void Awake()
         {
-            Config.Load();
+            SnapTurningConfig.Load();
             OptionsPanelHandler.RegisterModOptions(new Options());
 
-            var harmony = new Harmony("com.ethanfischer.subnautica.snapturning.mod");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
-
     }
 }
