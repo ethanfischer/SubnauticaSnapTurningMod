@@ -12,7 +12,8 @@ namespace SubnauticaSnapTurningMod
         private static float SeamothSnapAngle => SnapTurningConfig.SnapAngles[SnapTurningConfig.SeamothAngleChoiceIndex];
         private static float PrawnSnapAngle => SnapTurningConfig.SnapAngles[SnapTurningConfig.PrawnAngleChoiceIndex];
         private static bool IsInPrawnSuit => Player.main.inExosuit;
-        private static bool IsInSeamoth => Player.main.inSeamoth; 
+        private static bool IsInSeamoth => Player.main.inSeamoth;
+        public static bool UsedSnapTurning;
 
         [HarmonyPatch(typeof(MainCameraControl), nameof(MainCameraControl.OnUpdate))]
         [HarmonyPrefix]
@@ -22,22 +23,21 @@ namespace SubnauticaSnapTurningMod
             var isIgnoringPrawn = IsInPrawnSuit && !SnapTurningConfig.EnablePrawn;
             if (!SnapTurningConfig.EnableSnapTurning || isIgnoringSeamoth || isIgnoringPrawn)
             {
+                UsedSnapTurning = false;
                 return true; //Enter vanilla method
             }
-
+            UsedSnapTurning = true;
             var didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight) || KeyCodeUtils.GetKeyDown(SnapTurningConfig.KeybindKeyRight);
             var didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft) || KeyCodeUtils.GetKeyDown(SnapTurningConfig.KeybindKeyLeft);
-            var isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
-            var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
-            var isLooking = didLookLeft || didLookRight || isLookingLeft || isLookingRight;
-
+            //var isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
+            //var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
+            var isLooking = didLookLeft || didLookRight;// || isLookingLeft || isLookingRight;
             var shouldSnapTurn = XRSettings.enabled && isLooking;
             if (shouldSnapTurn)
             {
                 UpdatePlayerOrVehicleRotation(didLookRight, didLookLeft);
                 return false; //Don't enter vanilla method if we snap turn
             }
-
             return true;
         }
 
@@ -93,6 +93,18 @@ namespace SubnauticaSnapTurningMod
             }
 
             return snapAngle;
+        }
+    }
+    [HarmonyPatch(typeof(GameInput), nameof(GameInput.Update))]
+    internal class GameInputPatcher
+    {
+        [HarmonyPostfix]
+        public static void ClearControllerHorizontalInput(ref float[] ___axisValues)
+        {
+            if (MainCameraControlPatcher.UsedSnapTurning)
+            {
+                ___axisValues[0] = 0f;
+            }
         }
     }
 }
