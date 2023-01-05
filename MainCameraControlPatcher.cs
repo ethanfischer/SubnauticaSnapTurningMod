@@ -13,7 +13,7 @@ namespace SubnauticaSnapTurningMod
         private static float PrawnSnapAngle => SnapTurningConfig.SnapAngles[SnapTurningConfig.PrawnAngleChoiceIndex];
         private static bool IsInPrawnSuit => Player.main.inExosuit;
         private static bool IsInSeamoth => Player.main.inSeamoth;
-        public static bool UsedSnapTurning;
+        public static bool ShouldResetControllerHAxis;
 
         [HarmonyPatch(typeof(MainCameraControl), nameof(MainCameraControl.OnUpdate))]
         [HarmonyPrefix]
@@ -21,12 +21,12 @@ namespace SubnauticaSnapTurningMod
         {
             var isIgnoringSeamoth = IsInSeamoth && !SnapTurningConfig.EnableSeamoth;
             var isIgnoringPrawn = IsInPrawnSuit && !SnapTurningConfig.EnablePrawn;
-            if (!SnapTurningConfig.EnableSnapTurning || isIgnoringSeamoth || isIgnoringPrawn)
+            if ((!SnapTurningConfig.EnableSnapTurning && !Player.main.isPiloting) || isIgnoringSeamoth || isIgnoringPrawn)
             {
-                UsedSnapTurning = false;
+                ShouldResetControllerHAxis = false;
                 return true; //Enter vanilla method
             }
-            UsedSnapTurning = true;
+            
             var didLookRight = GameInput.GetButtonDown(GameInput.Button.LookRight) || KeyCodeUtils.GetKeyDown(SnapTurningConfig.KeybindKeyRight);
             var didLookLeft = GameInput.GetButtonDown(GameInput.Button.LookLeft) || KeyCodeUtils.GetKeyDown(SnapTurningConfig.KeybindKeyLeft);
             //var isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
@@ -36,6 +36,7 @@ namespace SubnauticaSnapTurningMod
             if (shouldSnapTurn)
             {
                 UpdatePlayerOrVehicleRotation(didLookRight, didLookLeft);
+                ShouldResetControllerHAxis = true;
                 return false; //Don't enter vanilla method if we snap turn
             }
             return true;
@@ -101,7 +102,7 @@ namespace SubnauticaSnapTurningMod
         [HarmonyPostfix]
         public static void ClearControllerHorizontalInput(ref float[] ___axisValues)
         {
-            if (MainCameraControlPatcher.UsedSnapTurning)
+            if (MainCameraControlPatcher.ShouldResetControllerHAxis)
             {
                 ___axisValues[0] = 0f;
             }
