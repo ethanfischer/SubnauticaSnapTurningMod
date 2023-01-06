@@ -21,7 +21,7 @@ namespace SubnauticaSnapTurningMod
         {
             var isIgnoringSeamoth = IsInSeamoth && !SnapTurningConfig.EnableSeamoth;
             var isIgnoringPrawn = IsInPrawnSuit && !SnapTurningConfig.EnablePrawn;
-            if ((!SnapTurningConfig.EnableSnapTurning && !Player.main.isPiloting) || isIgnoringSeamoth || isIgnoringPrawn)
+            if (!SnapTurningConfig.EnableSnapTurning || isIgnoringSeamoth || isIgnoringPrawn)
             {
                 ShouldResetControllerHAxis = false;
                 return true; //Enter vanilla method
@@ -32,7 +32,7 @@ namespace SubnauticaSnapTurningMod
             //var isLookingLeft = GameInput.GetButtonHeld(GameInput.Button.LookLeft);
             //var isLookingRight = GameInput.GetButtonHeld(GameInput.Button.LookRight);
             var isLooking = didLookLeft || didLookRight;// || isLookingLeft || isLookingRight;
-            var shouldSnapTurn = XRSettings.enabled && isLooking;
+            var shouldSnapTurn = XRSettings.enabled && isLooking; 
             if (shouldSnapTurn)
             {
                 UpdatePlayerOrVehicleRotation(didLookRight, didLookLeft);

@@ -86,6 +86,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)bin\Debug\SubnauticaSnapTurningMod.dll" "D:\SteamWin\steamapps\common\Subnautica\BepInEx\plugins\SnapTurning"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)bin\Debug\SubnauticaSnapTurningMod.dll" "D:\SteamWin\steamapps\common\Subnautica\BepInEx\plugins\SnapTurning"
+copy "$(ProjectDir)bin\Debug\SubnauticaSnapTurningMod.dll" "$(ProjectDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
