@@ -12,7 +12,7 @@ namespace SubnauticaSnapTurningMod
             MODNAME = "SnapTurning",
             AUTHOR = "ethanfischer",
             GUID = "com.ethanfischer.subnautica.snapturning.mod",
-            VERSION = "1.1.1";
+            VERSION = "1.3.1";
 
         private static Harmony harmony = new Harmony(GUID);
 
